@@ -1,0 +1,18 @@
+<%- include("header") %>
+    <h1><%= kindOfDay %></h1>
+    <ul>
+  
+   
+    <%  for(var i=0; i<newListItems.length; i++){ %>
+        <li><%= newListItems[i] %></li>
+    <%  }%>
+    </ul>
+
+    <form action="/" method="post" class="item">
+      <input placeholder="new item" type="text" name="newItem" />
+      <button name="list" type="submit" value=<%=newListItems%>  >+</button>
+    </form>
+    <%- include("footer") %>
+
+  
+    
