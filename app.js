@@ -32,18 +32,23 @@ const item3 = new Item({
   name: "do task 3",
 });
 const defaultItems = [item1, item2, item3];
-Item.insertMany(defaultItems, function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("inserted successfully");
-  }
-});
-
-Item.find()
 
 app.get("/", function (req, res) {
-  res.render("list", { kindOfDay: "today", newListItems: items });
+  Item.find({}, function (err, founditems) {
+    if (founditems.length === 0) {
+      Item.insertMany(defaultItems, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("inserted successfully");
+        }
+      });
+      res.redirect("/");
+    } else {
+      res.render("list", { kindOfDay: "today", newListItems: founditems });
+      console.log(founditems);
+    }
+  });
 });
 app.post("/", function (req, res) {
   let item = req.body.newItem;

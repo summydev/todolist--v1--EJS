@@ -1,12 +1,21 @@
 <%- include("header") %>
     <h1><%= kindOfDay %></h1>
-    <ul>
+
   
    
-    <%  for(var i=0; i<newListItems.length; i++){ %>
-        <li><%= newListItems[i] %></li>
-    <%  }%>
-    </ul>
+<div class="box">
+  
+  <% newListItems.forEach(function(item){%>
+    <div class="item">
+<input type="checkbox" >
+
+<p><%=   item.name%></p>
+
+    </div>
+ <%   }) %>
+
+</div>
+     
 
     <form action="/" method="post" class="item">
       <input placeholder="new item" type="text" name="newItem" />
