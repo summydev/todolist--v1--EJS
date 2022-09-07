@@ -51,17 +51,33 @@ app.get("/", function (req, res) {
   });
 });
 app.post("/", function (req, res) {
-  let item = req.body.newItem;
-  if (req.body.list === "") {
-    shoppitems.push(item);
+  let itemName = req.body.newItem;
 
-    res.redirect("/shop");
-  } else {
-    items.push(item);
-    console.log(item);
-    res.redirect("/");
-  }
-  console.log(item);
+  const item = new Item({
+    name: itemName,
+  });
+  item.save();
+  res.redirect("/");
+  // if (req.body.list === "") {
+  //   shoppitems.push(item);
+
+  //   res.redirect("/shop");
+  // } else {
+  //   items.push(item);
+  //   console.log(item);
+  //   res.redirect("/");
+  // }
+  console.log(itemName);
+});
+app.post("/delete", function (req, res) {
+  // }
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId, function (err) {
+    if (err) {
+      console.log(err);
+    } else console.log("duccessfully deleted");
+  });
+  res.redirect("/");
 });
 
 app.get("/shop", function (req, res) {
