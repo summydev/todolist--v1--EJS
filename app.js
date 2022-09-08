@@ -90,21 +90,18 @@ app.get("/shop", function (req, res) {
 });
 app.get("/:postName", function (req, res) {
   const customListName = req.params.postName;
-  List.findOne({name: customListName}, function(err, results){
-    if(err){
-      console.log(err);
-
-    }else{
-      console.log(results)
+  List.findOne({ name: customListName }, function (err, results) {
+    if (err) {
+      console.log("doesnt exist...not found");
+    } else {
+      console.log("exists");
     }
-  })
+  });
   const list = new List({
     name: customListName,
     items: defaultItems,
   });
   list.save();
-
-  
 });
 app.listen(4000, function () {
   console.log("server running on port 4000");
