@@ -57,12 +57,26 @@ app.get("/", function (req, res) {
 });
 app.post("/", function (req, res) {
   let itemName = req.body.newItem;
+  const listName = req.body.list;
 
   const item = new Item({
     name: itemName,
   });
-  item.save();
-  res.redirect("/");
+
+  if (listName === "today") {
+    item.save();
+    res.redirect("/");
+  } else {
+    List.findOne({
+      name: listName,
+      function(err, results) {
+        results.items.push(item);
+        results.save();
+        res.redirect("/" + listName);
+      },
+    });
+  }
+
   // if (req.body.list === "") {
   //   shoppitems.push(item);
 
@@ -85,23 +99,28 @@ app.post("/delete", function (req, res) {
   res.redirect("/");
 });
 
-app.get("/shop", function (req, res) {
-  res.render("list", { kindOfDay: "Shopping Cart ", newListItems: shoppitems });
-});
-app.get("/:postName", function (req, res) {
-  const customListName = req.params.postName;
-  List.findOne({ name: customListName }, function (err, results) {
-    if (err) {
-      console.log("doesnt exist...not found");
-    } else {
-      console.log("exists");
+app.get("/shop", function (req, res) {});
+app.get("/:customListName", function (req, res) {
+  const customListName = req.params.customListName;
+  List.findOne({ name: customListName }, function (err, foundList) {
+    if (!err) {
+      if (!foundList) {
+        console.log("doesnt exist...not found");
+        const list = new List({
+          name: customListName,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect("/" + customListName);
+      } else {
+        console.log("exists");
+        res.render("list", {
+          kindOfDay: foundList.name,
+          newListItems: foundList.items,
+        });
+      }
     }
   });
-  const list = new List({
-    name: customListName,
-    items: defaultItems,
-  });
-  list.save();
 });
 app.listen(4000, function () {
   console.log("server running on port 4000");
