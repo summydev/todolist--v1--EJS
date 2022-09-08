@@ -91,12 +91,18 @@ app.post("/", function (req, res) {
 app.post("/delete", function (req, res) {
   // }
   const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId, function (err) {
-    if (err) {
-      console.log(err);
-    } else console.log("duccessfully deleted");
-  });
-  res.redirect("/");
+  const listName=req.body.listName;
+  if(listName==="today"){
+    if(!err){
+      Item.findByIdAndRemove(checkedItemId, function (err) {
+        if (err) {
+          console.log(err);
+        } else console.log("duccessfully deleted");
+      });
+      res.redirect("/");
+    }
+  }
+  
 });
 
 app.get("/shop", function (req, res) {});
