@@ -32,6 +32,11 @@ const item3 = new Item({
   name: "do task 3",
 });
 const defaultItems = [item1, item2, item3];
+const listSchema = {
+  name: String,
+  items: [itemsSchema],
+};
+const List = mongoose.model("list", listSchema);
 
 app.get("/", function (req, res) {
   Item.find({}, function (err, founditems) {
@@ -83,7 +88,24 @@ app.post("/delete", function (req, res) {
 app.get("/shop", function (req, res) {
   res.render("list", { kindOfDay: "Shopping Cart ", newListItems: shoppitems });
 });
+app.get("/:postName", function (req, res) {
+  const customListName = req.params.postName;
+  List.findOne({name: customListName}, function(err, results){
+    if(err){
+      console.log(err);
 
+    }else{
+      console.log(results)
+    }
+  })
+  const list = new List({
+    name: customListName,
+    items: defaultItems,
+  });
+  list.save();
+
+  
+});
 app.listen(4000, function () {
   console.log("server running on port 4000");
 });
