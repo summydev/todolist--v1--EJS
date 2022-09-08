@@ -7,7 +7,6 @@ const app = express();
 const date = require(__dirname + "/date.js");
 console.log(date.getDate());
 //var items = ["go shop"];
-var shoppitems = [""];
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -67,14 +66,16 @@ app.post("/", function (req, res) {
     item.save();
     res.redirect("/");
   } else {
-    List.findOne({
-      name: listName,
-      function(err, results) {
-        results.items.push(item);
-        results.save();
-        res.redirect("/" + listName);
+    List.findOne(
+      {
+        name: listName,
       },
-    });
+      function (err, foundList) {
+        foundList.items.push(item);
+        foundList.save();
+        res.redirect("/" + listName);
+      }
+    );
   }
 
   // if (req.body.list === "") {
@@ -112,7 +113,6 @@ app.post("/delete", function (req, res) {
   }
 });
 
-app.get("/shop", function (req, res) {});
 app.get("/:customListName", function (req, res) {
   const customListName = _.capitalize(req.params.customListName);
   List.findOne({ name: customListName }, function (err, foundList) {
