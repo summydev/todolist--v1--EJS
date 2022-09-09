@@ -131,6 +131,7 @@ app.get("/:customListName", function (req, res) {
           kindOfDay: foundList.name,
           newListItems: foundList.items,
         });
+        res.redirect("/");
       }
     }
   });
