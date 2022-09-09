@@ -78,15 +78,7 @@ app.post("/", function (req, res) {
     );
   }
 
-  // if (req.body.list === "") {
-  //   shoppitems.push(item);
 
-  //   res.redirect("/shop");
-  // } else {
-  //   items.push(item);
-  //   console.log(item);
-  //   res.redirect("/");
-  // }
   console.log(itemName);
 });
 app.post("/delete", function (req, res) {
